@@ -4,6 +4,7 @@ const { Form } = queryController;
 
 const insertFormController = async (req, res) => {
 	let data = req.body;
+
 	if (!data.firstName || !data.lastName || !data.email || !data.dateOfBirth) {
 		return res.send("Missing Parrams")
 	}
@@ -21,7 +22,7 @@ const insertFormController = async (req, res) => {
 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 	if (!emailRegex.test(data.email)) {
-	  return res.status(400).send('Invalid email format.')
+		return res.status(400).send('Invalid email format.')
 	}
 	// Calculate age based on date of birth
 	const currentDate = new Date()
@@ -35,15 +36,16 @@ const insertFormController = async (req, res) => {
 
 	data.age = ageInYears
 
-
 	let projectRes = await Form.insertform(data)
 
-	if (projectRes.error) {
+	if (!projectRes) {
 		return res.status(500).send('Error in inserting data')
 	}
+
 	return res.status(200).send(projectRes)
 }
 exports.insertFormController = insertFormController
+
 const getAllFormController = async (req, res) => {
 
 	let payload = {}
